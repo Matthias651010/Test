@@ -2,53 +2,89 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Mein lernender Chatbot</title>
+  <title>Mein Chatbot</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #1e1e1e;
-      color: #f0f0f0;
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 50px;
+      margin: 0;
+      padding: 20px;
     }
+
     h2 {
       color: #00d4ff;
     }
+
     input, button {
-      margin: 5px;
       padding: 10px;
       font-size: 16px;
       border-radius: 8px;
       border: none;
+      margin: 5px;
     }
+
     input {
-      width: 300px;
+      width: 280px;
     }
+
     button {
       background-color: #00d4ff;
-      color: black;
+      color: #000;
       cursor: pointer;
     }
+
     #chat {
-      margin-top: 20px;
-      background-color: #2e2e2e;
+      background-color: #2b2b2b;
       padding: 15px;
       border-radius: 10px;
       width: 90%;
       max-width: 600px;
+      height: 400px;
+      overflow-y: auto;
+      margin-top: 20px;
     }
+
     .nachricht {
+      display: flex;
       margin: 10px 0;
     }
-    .user { color: #88f; }
-    .bot { color: #4f4; }
+
+    .user {
+      justify-content: flex-end;
+    }
+
+    .bot {
+      justify-content: flex-start;
+    }
+
+    .blase {
+      max-width: 70%;
+      padding: 10px 15px;
+      border-radius: 20px;
+      position: relative;
+      word-wrap: break-word;
+    }
+
+    .user .blase {
+      background-color: #007bff;
+      color: #fff;
+      border-bottom-right-radius: 5px;
+    }
+
+    .bot .blase {
+      background-color: #444;
+      color: #fff;
+      border-bottom-left-radius: 5px;
+    }
   </style>
 </head>
 <body>
 
-  <h2>Mini-Chatbot mit Lernfunktion</h2>
+  <h2>Chatbot mit Blasen</h2>
 
   <input id="userInput" placeholder="Deine Frage...">
   <input id="userAnswer" placeholder="Bot-Antwort (optional)">
@@ -66,15 +102,25 @@
 
       if (!frage) return;
 
-      chat.innerHTML += `<div class="nachricht user"><strong>Du:</strong> ${frage}</div>`;
+      // Nutzer-Nachricht
+      chat.innerHTML += `
+        <div class="nachricht user">
+          <div class="blase">${frage}</div>
+        </div>`;
 
       if (neueAntwort) {
         wissen[frage] = neueAntwort;
         localStorage.setItem("wissen", JSON.stringify(wissen));
-        chat.innerHTML += `<div class="nachricht bot"><strong>Bot:</strong> Danke, ich habe das gelernt!</div>`;
+        chat.innerHTML += `
+          <div class="nachricht bot">
+            <div class="blase">Danke, ich habe das gelernt!</div>
+          </div>`;
       } else {
         const antwort = wissen[frage] || "Ich kenne das noch nicht. Gib mir eine Antwort und klick nochmal.";
-        chat.innerHTML += `<div class="nachricht bot"><strong>Bot:</strong> ${antwort}</div>`;
+        chat.innerHTML += `
+          <div class="nachricht bot">
+            <div class="blase">${antwort}</div>
+          </div>`;
       }
 
       document.getElementById("userInput").value = "";
