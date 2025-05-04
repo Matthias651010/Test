@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>Mini-lernender Chatbot</h2>
+    <input id="userInput" placeholder="Schreib was...">
+    <input id="userAnswer" placeholder="Bot-Antwort (optional)">
+    <button onclick="antwort()">Senden</button>
+    <p id="botAntwort"></p>
+
+    <script>
+      let wissen = JSON.parse(localStorage.getItem("wissen")) || {};
+
+      function antwort() {
+        const input = document.getElementById("userInput").value.toLowerCase();
+        const neueAntwort = document.getElementById("userAnswer").value;
+
+        if (neueAntwort) {
+          wissen[input] = neueAntwort;
+          localStorage.setItem("wissen", JSON.stringify(wissen));
+          document.getElementById("botAntwort").innerText = "Gespeichert!";
+        } else {
+          const reply = wissen[input] || "Ich kenne das noch nicht.";
+          document.getElementById("botAntwort").innerText = reply;
+        }
+      }
+    </script>
+  </body>
+</html>
