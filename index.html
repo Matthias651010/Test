@@ -1,28 +1,87 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <h2>Mini-lernender Chatbot</h2>
-    <input id="userInput" placeholder="Schreib was...">
-    <input id="userAnswer" placeholder="Bot-Antwort (optional)">
-    <button onclick="antwort()">Senden</button>
-    <p id="botAntwort"></p>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Mein lernender Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    h2 {
+      color: #00d4ff;
+    }
+    input, button {
+      margin: 5px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+    }
+    input {
+      width: 300px;
+    }
+    button {
+      background-color: #00d4ff;
+      color: black;
+      cursor: pointer;
+    }
+    #chat {
+      margin-top: 20px;
+      background-color: #2e2e2e;
+      padding: 15px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+    }
+    .nachricht {
+      margin: 10px 0;
+    }
+    .user { color: #88f; }
+    .bot { color: #4f4; }
+  </style>
+</head>
+<body>
 
-    <script>
-      let wissen = JSON.parse(localStorage.getItem("wissen")) || {};
+  <h2>Mini-Chatbot mit Lernfunktion</h2>
 
-      function antwort() {
-        const input = document.getElementById("userInput").value.toLowerCase();
-        const neueAntwort = document.getElementById("userAnswer").value;
+  <input id="userInput" placeholder="Deine Frage...">
+  <input id="userAnswer" placeholder="Bot-Antwort (optional)">
+  <button onclick="antwort()">Senden</button>
 
-        if (neueAntwort) {
-          wissen[input] = neueAntwort;
-          localStorage.setItem("wissen", JSON.stringify(wissen));
-          document.getElementById("botAntwort").innerText = "Gespeichert!";
-        } else {
-          const reply = wissen[input] || "Ich kenne das noch nicht.";
-          document.getElementById("botAntwort").innerText = reply;
-        }
+  <div id="chat"></div>
+
+  <script>
+    let wissen = JSON.parse(localStorage.getItem("wissen")) || {};
+
+    function antwort() {
+      const frage = document.getElementById("userInput").value.trim().toLowerCase();
+      const neueAntwort = document.getElementById("userAnswer").value.trim();
+      const chat = document.getElementById("chat");
+
+      if (!frage) return;
+
+      chat.innerHTML += `<div class="nachricht user"><strong>Du:</strong> ${frage}</div>`;
+
+      if (neueAntwort) {
+        wissen[frage] = neueAntwort;
+        localStorage.setItem("wissen", JSON.stringify(wissen));
+        chat.innerHTML += `<div class="nachricht bot"><strong>Bot:</strong> Danke, ich habe das gelernt!</div>`;
+      } else {
+        const antwort = wissen[frage] || "Ich kenne das noch nicht. Gib mir eine Antwort und klick nochmal.";
+        chat.innerHTML += `<div class="nachricht bot"><strong>Bot:</strong> ${antwort}</div>`;
       }
-    </script>
-  </body>
+
+      document.getElementById("userInput").value = "";
+      document.getElementById("userAnswer").value = "";
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+
+</body>
 </html>
